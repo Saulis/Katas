@@ -50,4 +50,11 @@ class GameTests {
     assertEquals(265, game.roll(rolls))
   }
 
+  @Test
+  def lastMomentFailGame() {
+    val rolls = List.fill(9)(10) ++ List(10, 5, 5)
+
+    assertEquals(285, game.roll(rolls))
+  }
+
 }
