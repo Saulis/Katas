@@ -13,8 +13,8 @@ class GameTests {
   import org.junit.Test
   import org.junit.Assert._
 
-  val twentyZeroes = List.fill(20)(0)
-  val twentyOnes = List.fill(20)(1)
+  val twentyZeroesRolls = List.fill(20)(0)
+  val twentyOnesRolls = List.fill(20)(1)
   val game = Game
 
   @Before
@@ -23,16 +23,22 @@ class GameTests {
 
   @Test
   def gutterGame() {
-    val points = game.roll(twentyZeroes)
+    val points = game.roll(twentyZeroesRolls)
 
     assertEquals(0, points)
   }
 
-
   @Test
   def allOnesGame() {
-    val points = game.roll(twentyOnes)
+    val points = game.roll(twentyOnesRolls)
 
     assertEquals(20, points)
+  }
+
+  @Test
+  def spareGame() {
+    val rolls = List(5, 5, 3) ++ List.fill(17)(0)
+
+    assertEquals(16, game.roll(rolls))
   }
 }
