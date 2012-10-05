@@ -51,4 +51,11 @@ class GameTests {
     assertEquals(300, game.roll(twelveStrikes))
   }
 
+  @Test
+  def almostPerfectGame() {
+    val rolls = List.fill(9)(10) ++ List(5, 5)
+
+    assertEquals(265, game.roll(rolls))
+  }
+
 }

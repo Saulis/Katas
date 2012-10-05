@@ -9,14 +9,6 @@ package bowling
  */
 object Game {
 
-  private def totalForRemainingPins(pins: List[Int]): Int = {
-    if (pinsRemain(pins))
-      frameTotal(pins)
-    else {
-      0
-    }
-  }
-
   private def sumOfNextThreeRolls(pins: List[Int]): Int = {
     pins.take(3).sum
   }
@@ -25,19 +17,25 @@ object Game {
     pins.take(2).sum
   }
 
-  def lastFrameEndsWithStrike(pins: List[Int]): Boolean = {
+  private def lastFrameEndsWithStrike(pins: List[Int]): Boolean = {
     pins.length == 3 & nextRollIsStrike(pins)
   }
 
-  private def frameTotal(pins: List[Int]): Int = {
-    if (lastFrameEndsWithStrike(pins))
-      sumOfNextThreeRolls(pins)
+  private def lastFrame(frame: Int): Boolean = frame == 10
+
+  private def lastFrameTotal(pins: List[Int]): Int = {
+    pins.sum
+  }
+
+  private def frameTotal(frame: Int, pins: List[Int]): Int = {
+    if (lastFrame(frame))
+      lastFrameTotal(pins)
     else if (nextRollIsStrike(pins))
-      sumOfNextThreeRolls(pins) + totalForRemainingPins(pins.drop(1))
+      sumOfNextThreeRolls(pins) + frameTotal(frame + 1, pins.drop(1))
     else if (frameEndsWithSpare(pins))
-      sumOfNextThreeRolls(pins) + totalForRemainingPins(pins.drop(2))
+      sumOfNextThreeRolls(pins) + frameTotal(frame + 1, pins.drop(2))
     else
-      sumOfNextTwoRolls(pins) + totalForRemainingPins(pins.drop(2))
+      sumOfNextTwoRolls(pins) + frameTotal(frame + 1, pins.drop(2))
   }
 
   private def nextRollIsStrike(pins: List[Int]) : Boolean = {
@@ -53,6 +51,6 @@ object Game {
   }
 
   def roll (pins: List[Int]): Int =  {
-     totalForRemainingPins(pins)
+    frameTotal(1, pins)
    }
 }
