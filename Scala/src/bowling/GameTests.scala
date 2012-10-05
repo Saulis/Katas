@@ -41,4 +41,12 @@ class GameTests {
 
     assertEquals(16, game.roll(rolls))
   }
+
+  @Test
+  def oneStrikeGame() {
+    val rolls = List(10, 3, 4) ++ List.fill(16)(0)
+
+    assertEquals(24, game.roll(rolls))
+  }
+
 }

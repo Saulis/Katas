@@ -9,34 +9,44 @@ package bowling
  */
 object Game {
 
-  def spareTotal(pins: List[Int]): Int = {
-    pins.take(3).sum
-  }
-
-  def framePoints(pins: List[Int]): Int = {
+  private def totalForRemainingPins(pins: List[Int]): Int = {
     if (pinsRemain(pins))
-      if (frameEndsWithSpare(pins))
-        spareTotal(pins) + framePoints(pins.drop(2))
-      else
-        pins.head + framePoints(pins.drop(1))
+      frameTotal(pins)
     else {
       0
     }
   }
 
-  def frameEndsWithStrike(pins: List[Int]) : Boolean = {
+  private def sumOfNextThreeRolls(pins: List[Int]): Int = {
+    pins.take(3).sum
+  }
+
+  private def sumOfNextTwoRolls(pins: List[Int]): Int = {
+    pins.take(2).sum
+  }
+
+  private def frameTotal(pins: List[Int]): Int = {
+    if (frameEndsWithStrike(pins))
+      sumOfNextThreeRolls(pins) + totalForRemainingPins(pins.drop(1))
+    else if (frameEndsWithSpare(pins))
+      sumOfNextThreeRolls(pins) + totalForRemainingPins(pins.drop(2))
+    else
+      sumOfNextTwoRolls(pins) + totalForRemainingPins(pins.drop(2))
+  }
+
+  private def frameEndsWithStrike(pins: List[Int]) : Boolean = {
     pins.head == 10
   }
 
-  def frameEndsWithSpare(pins: List[Int]) : Boolean = {
-    (!frameEndsWithStrike(pins) & pins.take(2).sum == 10)
+  private def frameEndsWithSpare(pins: List[Int]) : Boolean = {
+    (!frameEndsWithStrike(pins) & sumOfNextTwoRolls(pins) == 10)
   }
 
-  def pinsRemain(pins: List[Int]): Boolean = {
+  private def pinsRemain(pins: List[Int]): Boolean = {
     pins.length > 0
   }
 
   def roll (pins: List[Int]): Int =  {
-     framePoints(pins)
+     totalForRemainingPins(pins)
    }
 }
