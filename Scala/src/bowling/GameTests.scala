@@ -15,6 +15,7 @@ class GameTests {
 
   val twentyZeroesRolls = List.fill(20)(0)
   val twentyOnesRolls = List.fill(20)(1)
+  val twelveStrikes = List.fill(12)(10)
   val game = Game
 
   @Before
@@ -23,16 +24,12 @@ class GameTests {
 
   @Test
   def gutterGame() {
-    val points = game.roll(twentyZeroesRolls)
-
-    assertEquals(0, points)
+    assertEquals(0, game.roll(twentyZeroesRolls))
   }
 
   @Test
   def allOnesGame() {
-    val points = game.roll(twentyOnesRolls)
-
-    assertEquals(20, points)
+    assertEquals(20, game.roll(twentyOnesRolls))
   }
 
   @Test
@@ -47,6 +44,11 @@ class GameTests {
     val rolls = List(10, 3, 4) ++ List.fill(16)(0)
 
     assertEquals(24, game.roll(rolls))
+  }
+
+  @Test
+  def perfectGame() {
+    assertEquals(300, game.roll(twelveStrikes))
   }
 
 }

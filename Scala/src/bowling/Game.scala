@@ -25,8 +25,14 @@ object Game {
     pins.take(2).sum
   }
 
+  def lastFrameEndsWithStrike(pins: List[Int]): Boolean = {
+    pins.length == 3 & nextRollIsStrike(pins)
+  }
+
   private def frameTotal(pins: List[Int]): Int = {
-    if (frameEndsWithStrike(pins))
+    if (lastFrameEndsWithStrike(pins))
+      sumOfNextThreeRolls(pins)
+    else if (nextRollIsStrike(pins))
       sumOfNextThreeRolls(pins) + totalForRemainingPins(pins.drop(1))
     else if (frameEndsWithSpare(pins))
       sumOfNextThreeRolls(pins) + totalForRemainingPins(pins.drop(2))
@@ -34,12 +40,12 @@ object Game {
       sumOfNextTwoRolls(pins) + totalForRemainingPins(pins.drop(2))
   }
 
-  private def frameEndsWithStrike(pins: List[Int]) : Boolean = {
+  private def nextRollIsStrike(pins: List[Int]) : Boolean = {
     pins.head == 10
   }
 
   private def frameEndsWithSpare(pins: List[Int]) : Boolean = {
-    (!frameEndsWithStrike(pins) & sumOfNextTwoRolls(pins) == 10)
+    (!nextRollIsStrike(pins) & sumOfNextTwoRolls(pins) == 10)
   }
 
   private def pinsRemain(pins: List[Int]): Boolean = {
