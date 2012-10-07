@@ -33,19 +33,15 @@ namespace Bowling
         {
             if(EndsInSpare)
             {
-                return Rolls.Sum() + FirstRollFromNextFrame();
+                return Rolls.Sum() + game.GetScoreOfNextRoll(this);
             }
-            else if(EndsInStrike)
+            
+            if(EndsInStrike)
             {
-                return Rolls.Sum() + NextTwoRolls();
+                return Rolls.Sum() + game.GetSumOfNextTwoRolls(this);
             }
 
             return Rolls.Sum();
-        }
-
-        private int NextTwoRolls()
-        {
-            return game.GetScoreFromNextTwoRolls(this);
         }
 
         protected bool EndsInStrike
@@ -53,19 +49,9 @@ namespace Bowling
             get { return AllPinsHaveBeenHit && !BothRollsHaveBeenThrown; }
         }
 
-        private int FirstRollFromNextFrame()
-        {
-            return GetNextFrame().FirstRoll;
-        }
-
         public int FirstRoll
         {
             get { return Rolls.First(); }
-        }
-
-        protected Frame GetNextFrame()
-        {
-            return game.GetNextFrame(this);
         }
 
         protected bool EndsInSpare

@@ -24,19 +24,12 @@ namespace Bowling
 
         private void StartANewFrame()
         {
-            if(frames.Count >= 9)
-            {
-                frames.Add(new TenthFrame(this));
-            }
-            else
-            {
-                frames.Add(new Frame(this));    
-            }
+            frames.Add(frames.Count >= 9 ? new TenthFrame(this) : new Frame(this));
         }
 
         protected bool CurrentFrameHasEnded
         {
-            get { return frames.Any() && CurrentFrame.HasEnded; }
+            get { return !frames.Any() || CurrentFrame.HasEnded; }
         }
 
         private Frame CurrentFrame
@@ -49,26 +42,42 @@ namespace Bowling
             return frames.Sum(f => f.GetScore());
         }
 
-        public Frame GetNextFrame(Frame frame)
+        private Frame GetNextFrame(Frame frame)
         {
-            int indexOf = frames.IndexOf(frame);
+            int indexOfFrame = frames.IndexOf(frame);
 
-            return frames[indexOf + 1];
+            return frames[indexOfFrame + 1];
         }
 
-        public int GetScoreFromNextTwoRolls(Frame frame)
+        public int GetSumOfNextTwoRolls(Frame frame)
+        {
+            if(NextFrameHasTwoRolls(frame))
+            {
+                return GetNextFrame(frame).Rolls.Sum();
+            }
+
+            return GetScoreOfNextRoll(frame) + GetScoreOfFirstRollFromSecondFrame(frame);
+        }
+
+        private int GetScoreOfFirstRollFromSecondFrame(Frame frame)
+        {
+            Frame secondFrame = GetNextFrame(GetNextFrame(frame));
+
+            return secondFrame.FirstRoll;
+        }
+
+        public int GetScoreOfNextRoll(Frame frame)
         {
             Frame nextFrame = GetNextFrame(frame);
 
-            List<int> rolls = nextFrame.Rolls.ToList();
+            return nextFrame.FirstRoll;
+        }
 
-            if(rolls.Count == 1)
-            {
-                Frame secondNextFrame = GetNextFrame(nextFrame);
-                rolls.Add(secondNextFrame.FirstRoll);
-            }
+        private bool NextFrameHasTwoRolls(Frame frame)
+        {
+            Frame nextFrame = GetNextFrame(frame);
 
-            return rolls.Sum();
+            return nextFrame.Rolls.Count() == 2;
         }
     }
 }

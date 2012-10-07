@@ -65,5 +65,25 @@ namespace Bowling
 
             Assert.That(sut.GetScore(), Is.EqualTo(300));
         }
+
+        [Test]
+        public void AlmostPerfectGame()
+        {
+            RollTimes(9, 10);
+            sut.Roll(5);
+            sut.Roll(5);
+
+            Assert.That(sut.GetScore(), Is.EqualTo(265));
+        }
+
+        [Test]
+        public void LastMomentFailGame()
+        {
+            RollTimes(10, 10);
+            sut.Roll(5);
+            sut.Roll(5);
+
+            Assert.That(sut.GetScore(), Is.EqualTo(285));
+        }
     }
 }
