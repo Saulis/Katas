@@ -12,20 +12,20 @@ namespace Bowling
             sut = new Game();
         }
 
-        [Test]
-        public void GutterGame()
-        {
-            RollTimes(20, 0);
-
-            Assert.That(sut.GetPoints(), Is.EqualTo(0));
-        }
-
         private void RollTimes(int times, int pins)
         {
             for (int i = 0; i < times; i++)
             {
                 sut.Roll(pins);
             }
+        }
+
+        [Test]
+        public void GutterGame()
+        {
+            RollTimes(20, 0);
+
+            Assert.That(sut.GetPoints(), Is.EqualTo(0));
         }
 
         [Test]
