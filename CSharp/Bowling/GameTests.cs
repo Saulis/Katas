@@ -25,7 +25,7 @@ namespace Bowling
         {
             RollTimes(20, 0);
 
-            Assert.That(sut.GetPoints(), Is.EqualTo(0));
+            Assert.That(sut.GetScore(), Is.EqualTo(0));
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace Bowling
         {
             RollTimes(20, 1);
 
-            Assert.That(sut.GetPoints(), Is.EqualTo(20));
+            Assert.That(sut.GetScore(), Is.EqualTo(20));
         }
 
         [Test]
@@ -44,7 +44,18 @@ namespace Bowling
             sut.Roll(3);
             RollTimes(17, 0);
 
-            Assert.That(sut.GetPoints(), Is.EqualTo(16));
+            Assert.That(sut.GetScore(), Is.EqualTo(16));
+        }
+
+        [Test]
+        public void StrikeGame()
+        {
+            sut.Roll(10);
+            sut.Roll(3);
+            sut.Roll(4);
+            RollTimes(16, 0);
+
+            Assert.That(sut.GetScore(), Is.EqualTo(24));
         }
     }
 }

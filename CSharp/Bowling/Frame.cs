@@ -26,7 +26,7 @@ namespace Bowling
 
         public void AddRoll(int pins)
         {
-            Rolls.Add(pins);
+            rolls.Add(pins);
         }
 
         public virtual int GetScore()
@@ -35,8 +35,22 @@ namespace Bowling
             {
                 return Rolls.Sum() + FirstRollFromNextFrame();
             }
+            else if(EndsInStrike)
+            {
+                return Rolls.Sum() + NextTwoRolls();
+            }
 
             return Rolls.Sum();
+        }
+
+        private int NextTwoRolls()
+        {
+            return game.GetScoreFromNextTwoRolls(this);
+        }
+
+        protected bool EndsInStrike
+        {
+            get { return AllPinsHaveBeenHit && !BothRollsHaveBeenThrown; }
         }
 
         private int FirstRollFromNextFrame()
@@ -44,7 +58,7 @@ namespace Bowling
             return GetNextFrame().FirstRoll;
         }
 
-        protected int FirstRoll
+        public int FirstRoll
         {
             get { return Rolls.First(); }
         }
@@ -61,10 +75,10 @@ namespace Bowling
 
         private bool BothRollsHaveBeenThrown
         {
-            get { return Rolls.Count == 2; }
+            get { return Rolls.Count() == 2; }
         }
 
-        protected List<int> Rolls
+        public IEnumerable<int> Rolls
         {
             get { return rolls; }
         }
