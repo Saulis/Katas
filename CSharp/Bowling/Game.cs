@@ -53,7 +53,7 @@ namespace Bowling
         {
             if(NextFrameHasTwoRolls(frame))
             {
-                return GetNextFrame(frame).Rolls.Sum();
+                return GetNextFrame(frame).SumOfRolls();
             }
 
             return GetScoreOfNextRoll(frame) + GetScoreOfFirstRollFromSecondFrame(frame);
@@ -77,7 +77,7 @@ namespace Bowling
         {
             Frame nextFrame = GetNextFrame(frame);
 
-            return nextFrame.Rolls.Count() == 2;
+            return nextFrame.RollsCount() == 2;
         }
     }
 }

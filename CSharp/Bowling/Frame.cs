@@ -5,14 +5,15 @@ namespace Bowling
 {
     public class Frame
     {
-        private readonly List<int> rolls;
         private readonly Game game;
 
         public Frame(Game game)
         {
             this.game = game;
-            rolls = new List<int>();
+            Rolls = new List<int>();
         }
+
+        protected List<int> Rolls { get; set; }
 
         public bool HasEnded
         {
@@ -21,27 +22,7 @@ namespace Bowling
 
         private bool AllPinsHaveBeenHit
         {
-            get { return Rolls.Sum() == 10; }
-        }
-
-        public void AddRoll(int pins)
-        {
-            rolls.Add(pins);
-        }
-
-        public virtual int GetScore()
-        {
-            if(EndsInSpare)
-            {
-                return Rolls.Sum() + game.GetScoreOfNextRoll(this);
-            }
-            
-            if(EndsInStrike)
-            {
-                return Rolls.Sum() + game.GetSumOfNextTwoRolls(this);
-            }
-
-            return Rolls.Sum();
+            get { return SumOfRolls() == 10; }
         }
 
         protected bool EndsInStrike
@@ -61,12 +42,37 @@ namespace Bowling
 
         private bool BothRollsHaveBeenThrown
         {
-            get { return Rolls.Count() == 2; }
+            get { return RollsCount() == 2; }
         }
 
-        public IEnumerable<int> Rolls
+        public int SumOfRolls()
         {
-            get { return rolls; }
+            return Rolls.Sum();
+        }
+
+        public void AddRoll(int pins)
+        {
+            Rolls.Add(pins);
+        }
+
+        public virtual int GetScore()
+        {
+            if(EndsInSpare)
+            {
+                return SumOfRolls() + game.GetScoreOfNextRoll(this);
+            }
+            
+            if(EndsInStrike)
+            {
+                return SumOfRolls() + game.GetSumOfNextTwoRolls(this);
+            }
+
+            return SumOfRolls();
+        }
+
+        public int RollsCount()
+        {
+            return Rolls.Count();
         }
     }
 }
