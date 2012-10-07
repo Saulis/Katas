@@ -24,27 +24,22 @@ namespace Bowling
 
         private int SumRolls(IEnumerable<int> rolls, int frame = 1)
         {
-            if (rolls.Any())
+            if (TenthFrame(frame))
             {
-                if(TenthFrame(frame))
-                {
-                    return rolls.Sum();
-                }
-
-                if(FrameEndsInSpare(rolls))
-                {
-                    return NextThree(rolls).Sum() + SumRolls(rolls.Skip(2), frame + 1);
-                }
-
-                if(FrameEndsInStrike(rolls))
-                {
-                    return NextThree(rolls).Sum() + SumRolls(rolls.Skip(1), frame + 1);
-                }
-
-                return rolls.First() + SumRolls(rolls.Skip(1), frame + 1);
+                return rolls.Sum();
             }
 
-            return 0;
+            if (FrameEndsInSpare(rolls))
+            {
+                return NextThree(rolls).Sum() + SumRolls(rolls.Skip(2), frame + 1);
+            }
+
+            if (FrameEndsInStrike(rolls))
+            {
+                return NextThree(rolls).Sum() + SumRolls(rolls.Skip(1), frame + 1);
+            }
+
+            return NextTwo(rolls).Sum() + SumRolls(rolls.Skip(2), frame + 1);
         }
 
         private bool TenthFrame(int frame)
