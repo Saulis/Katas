@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Bowling
 {
-    public class Game
+    public class Game : IGame
     {
         private readonly List<Frame> frames;
 

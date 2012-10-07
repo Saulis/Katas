@@ -1,15 +1,26 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace Bowling
 {
-    class GameTests
+    class GameTests : IGameTests<Game>
     {
-        private Game sut;
+        
+    }
+
+    class FunctionalGameTests : IGameTests<FunctionalGame>
+    {
+         
+    }
+
+    abstract class IGameTests<TGame> where TGame: IGame
+    {
+        private TGame sut;
 
         [SetUp]
         public void Setup()
         {
-            sut = new Game();
+            sut = Activator.CreateInstance<TGame>();
         }
 
         private void RollTimes(int times, int pins)
