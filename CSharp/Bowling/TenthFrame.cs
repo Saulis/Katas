@@ -4,13 +4,18 @@ namespace Bowling
 {
     public class TenthFrame : Frame
     {
-        public TenthFrame(Game game) : base(game)
+        public TenthFrame(int number, Game game) : base(number, game)
         {
         }
 
         public override int GetScore()
         {
             return Rolls.Sum();
+        }
+
+        public override bool HasEnded
+        {
+            get { return false; }
         }
     }
 }

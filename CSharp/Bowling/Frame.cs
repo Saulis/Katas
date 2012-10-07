@@ -7,15 +7,18 @@ namespace Bowling
     {
         private readonly Game game;
 
-        public Frame(Game game)
+        public Frame(int number, Game game)
         {
+            this.Number = number;
             this.game = game;
             Rolls = new List<int>();
         }
 
+        public int Number { get; private set; }
+
         protected List<int> Rolls { get; set; }
 
-        public bool HasEnded
+        public virtual bool HasEnded
         {
             get { return AllPinsHaveBeenHit || BothRollsHaveBeenThrown; }
         }
@@ -45,6 +48,11 @@ namespace Bowling
             get { return RollsCount() == 2; }
         }
 
+        public int SecondRoll
+        {
+            get { return Rolls[1]; }
+        }
+
         public int SumOfRolls()
         {
             return Rolls.Sum();
@@ -59,12 +67,12 @@ namespace Bowling
         {
             if(EndsInSpare)
             {
-                return SumOfRolls() + game.GetScoreOfNextRoll(this);
+                return SumOfRolls() + game.GetNextRoll(this);
             }
             
             if(EndsInStrike)
             {
-                return SumOfRolls() + game.GetSumOfNextTwoRolls(this);
+                return SumOfRolls() + game.GetNextRoll(this) + game.GetSecondNextRoll(this);
             }
 
             return SumOfRolls();

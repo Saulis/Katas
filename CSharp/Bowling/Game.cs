@@ -9,32 +9,31 @@ namespace Bowling
 
         public Game()
         {
-            frames = new List<Frame> {new Frame(this)};
+            frames = CreateFrames();
+        }
+
+        private List<Frame> CreateFrames()
+        {
+            List<Frame> newFrames = new List<Frame>();
+
+            for (int i = 0; i < 9; i++)
+            {
+                newFrames.Add(new Frame(i+1, this));
+            }
+
+            newFrames.Add(new TenthFrame(10, this));
+
+            return newFrames;
         }
 
         public void Roll(int pins)
         {
-            if(CurrentFrameHasEnded)
-            {
-                StartANewFrame();
-            }
-
             CurrentFrame.AddRoll(pins);
-        }
-
-        private void StartANewFrame()
-        {
-            frames.Add(frames.Count >= 9 ? new TenthFrame(this) : new Frame(this));
-        }
-
-        protected bool CurrentFrameHasEnded
-        {
-            get { return !frames.Any() || CurrentFrame.HasEnded; }
         }
 
         private Frame CurrentFrame
         {
-            get { return frames.Last(); }
+            get { return frames.First(f => !f.HasEnded); }
         }
 
         public int GetScore()
@@ -44,40 +43,40 @@ namespace Bowling
 
         private Frame GetNextFrame(Frame frame)
         {
-            int indexOfFrame = frames.IndexOf(frame);
-
-            return frames[indexOfFrame + 1];
+            return frames.Single(f => f.Number == frame.Number + 1);
         }
 
-        public int GetSumOfNextTwoRolls(Frame frame)
-        {
-            if(NextFrameHasTwoRolls(frame))
-            {
-                return GetNextFrame(frame).SumOfRolls();
-            }
-
-            return GetScoreOfNextRoll(frame) + GetScoreOfFirstRollFromSecondFrame(frame);
-        }
-
-        private int GetScoreOfFirstRollFromSecondFrame(Frame frame)
+        private int GetFirstRollFromSecondFrame(Frame frame)
         {
             Frame secondFrame = GetNextFrame(GetNextFrame(frame));
 
             return secondFrame.FirstRoll;
         }
 
-        public int GetScoreOfNextRoll(Frame frame)
+        public int GetNextRoll(Frame frame)
         {
             Frame nextFrame = GetNextFrame(frame);
 
             return nextFrame.FirstRoll;
         }
 
+        public int GetSecondNextRoll(Frame frame)
+        {
+            if(NextFrameHasTwoRolls(frame))
+            {
+                Frame nextFrame = GetNextFrame(frame);
+
+                return nextFrame.SecondRoll;
+            }
+
+            return GetFirstRollFromSecondFrame(frame);
+        }
+
         private bool NextFrameHasTwoRolls(Frame frame)
         {
             Frame nextFrame = GetNextFrame(frame);
 
-            return nextFrame.RollsCount() == 2;
+            return nextFrame.RollsCount() >= 2;
         }
     }
 }
