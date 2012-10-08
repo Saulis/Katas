@@ -1,6 +1,4 @@
-﻿// Learn more about F# at http://fsharp.net
-
-namespace Tests.Tests
+﻿namespace Tests.Tests
 
 open NUnit.Framework
 open FsUnit
@@ -10,7 +8,8 @@ module BowlingTests =
 
     let twentyZeroes = Array.create 20 0
     let twentyOnes = Array.create 20 1
-    let spareRolls = Array.append [|5; 5; 3|] (Array.create 16 0)
+    let spareRolls = Array.append [|5; 5; 3|] (Array.create 17 0)
+    let strikeRolls = Array.append [|10; 3; 4|] (Array.create 16 0)
 
     [<TestFixture>] 
     type ``Given a game!`` ()=
@@ -27,3 +26,7 @@ module BowlingTests =
         [<Test>] member spareGame.
          ``spare game should have 16 points`` () =
             game.GetScore(spareRolls) |> should equal 16
+
+        [<Test>] member strikeGame.
+         ``strike game should have 24 points`` () =
+            game.GetScore(strikeRolls) |> should equal 24

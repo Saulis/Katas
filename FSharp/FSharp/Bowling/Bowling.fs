@@ -1,25 +1,26 @@
-﻿// Learn more about F# at http://fsharp.net
-
-module Bowling
+﻿module Bowling
 
 type Game() =
 
+    let Next (items : int[]) = items.[0]
     let NextTwo (items : int[]) = items.[0..1]
     let NextThree (items : int[]) = items.[0..2]
-    let FrameEndsInSpare (rolls : int[]) = Array.sum (NextTwo rolls) = 10
+    let WithoutNext (items : int[]) = items.[1..]
+    let WithoutNextTwo (items : int[]) = items.[2..]
+    let Sum (items : int[]) = Array.sum items
+    let SumNextTwo (items : int[]) = Sum (NextTwo items)
+    let SumNextThree (items : int[]) = Sum (NextThree items)
+    let FrameEndsInSpare (rolls : int[]) = Sum (NextTwo rolls) = 10
+    let FrameEndsInStrike (rolls : int[]) = Next rolls = 10
 
-    let rec SumFrames (rolls : int[], frame : int) =
+    let rec SumRolls (rolls : int[], frame : int) =
         if(frame = 10)
-           then Array.sum rolls
+           then Sum rolls
+        else if(FrameEndsInStrike(rolls))
+            then (SumNextThree rolls) + SumRolls((WithoutNext rolls), frame + 1)
+        else if(FrameEndsInSpare(rolls))
+            then (SumNextThree rolls) + SumRolls((WithoutNextTwo rolls), frame + 1)
         else
-            if(FrameEndsInSpare(rolls))
-                then (Array.sum (NextThree rolls)) + SumFrames(rolls.[2..], frame + 1)
-            else
-                (Array.sum (NextTwo rolls)) + SumFrames(rolls.[2..], frame + 1)
+            (SumNextTwo rolls) + SumRolls((WithoutNextTwo rolls), frame + 1)
 
-//    let SumFrames (rolls : int[], frame : int) = 
-//        match frame with 
-//        | 10 -> Array.sum rolls
-//        | _ -> SumFrame(rolls, frame)
-// 
-    member x.GetScore (rolls : int[]) = SumFrames(rolls, 1)
+    member x.GetScore (rolls : int[]) = SumRolls(rolls, 1)
