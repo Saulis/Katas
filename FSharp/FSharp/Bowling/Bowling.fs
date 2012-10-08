@@ -14,13 +14,13 @@ type Game() =
     let FrameEndsInStrike (rolls : int[]) = Next rolls = 10
 
     let rec SumRolls (rolls : int[], frame : int) =
-        if(frame = 10)
+        if frame = 10
            then Sum rolls
-        else if(FrameEndsInStrike(rolls))
-            then (SumNextThree rolls) + SumRolls((WithoutNext rolls), frame + 1)
-        else if(FrameEndsInSpare(rolls))
-            then (SumNextThree rolls) + SumRolls((WithoutNextTwo rolls), frame + 1)
+        else if FrameEndsInStrike(rolls)
+            then SumNextThree rolls + SumRolls(WithoutNext rolls, frame + 1)
+        else if FrameEndsInSpare(rolls)
+            then SumNextThree rolls + SumRolls(WithoutNextTwo rolls, frame + 1)
         else
-            (SumNextTwo rolls) + SumRolls((WithoutNextTwo rolls), frame + 1)
+            SumNextTwo rolls + SumRolls(WithoutNextTwo rolls, frame + 1)
 
     member x.GetScore (rolls : int[]) = SumRolls(rolls, 1)
