@@ -1,4 +1,4 @@
-module BowlingGame score where
+module BowlingGame (score) where
 
-score :: Int -> Int
-score s = 2 + 1
+score :: [Int] -> Int
+score rolls = sum rolls
