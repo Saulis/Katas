@@ -1,4 +1,4 @@
-
+module BowlingGame (score) where
 
 score :: [Int] -> Int
 score rolls = sumFrames (mapIntoTenFrames rolls)
@@ -20,7 +20,7 @@ sumFrames [] = 0
 sumFrames (x:xs)
     | head x == 10 = sum x + sumOfNextTwoRolls xs + sumFrames xs --strike
     | sum x == 10 = sum x + nextRoll xs + sumFrames xs -- spare
-    | otherwise = sum x
+    | otherwise = sum x + sumFrames xs
 
 nextRoll :: [[Int]] -> Int
 nextRoll [] = 0

@@ -5,7 +5,7 @@ twentyZeroes = replicate 20 0
 twentyOnes = replicate 20 1
 spareGameRolls = [5,5,3] ++ replicate 17 0
 strikeGameRolls = [10, 3, 4] ++ replicate 16 0
-perfectRoll = replicate 12 10
+perfectRolls = replicate 12 10
 almostPerfectGameRolls = replicate 9 10 ++ [5,5]
 lastMomentFailGameRolls = replicate 10 10 ++ [5,5]
 
