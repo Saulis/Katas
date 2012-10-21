@@ -4,11 +4,19 @@ object Game {
 
   def roll (rolls: List[Int]): Int = sumFrames(mapIntoTenFrames(rolls))
 
-  def mapIntoTenFrames (rolls: List[Int]) : List[List[Int]] = {
-	  mapIntoFrames(rolls).take(9) ++ foldIntoTenthFrame(mapIntoFrames(rolls).drop(9))
+  private def mapIntoTenFrames (rolls: List[Int]) : List[List[Int]] = {
+	  reduceIntoTenFrames(mapIntoFrames(rolls))
   }
   
-  private def foldIntoTenthFrame(frames: List[List[Int]]): List[List[Int]] = {
+  private def reduceIntoTenFrames (frames: List[List[Int]]): List[List[Int]] = {
+    frames.take(9) ++ reduceTenthFrame(frames)
+  }
+  
+  private def reduceTenthFrame(frames: List[List[Int]]): List[List[Int]] = {
+    reduceFrames(frames.drop(9))
+  }
+  
+  private def reduceFrames(frames: List[List[Int]]): List[List[Int]] = {
     List(frames.reduceLeft[List[Int]] { (acc, n) => acc ++ n })
   }
   
