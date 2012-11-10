@@ -1,4 +1,5 @@
 module Calculator (add) where
 
 add :: String -> Int
-add numbers = 0
+add "" = 0
+add numbers = 1
